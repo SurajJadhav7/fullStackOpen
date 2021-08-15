@@ -1,11 +1,11 @@
 import React from 'react';
 import Part from './Part';
 
-const Content = props => (
+const Content = ({ parts }) => (
   <div>
-    <Part part={props.part1} />
-    <Part part={props.part2} />
-    <Part part={props.part3} />
+    <Part part={parts[0]} />
+    <Part part={parts[1]} />
+    <Part part={parts[2]} />
   </div>
 );
 
