@@ -7,7 +7,11 @@ const Results = props => {
   } else if (props.matches.length === 0) {
     return <></>;
   } else if (props.matches.length > 1) {
-    const listOfMatches = props.matches.map(match => <p key={match.alpha2Code}>{match.name}</p>);
+    const listOfMatches = 
+      props.matches.map(match => 
+        <p key={match.alpha2Code}>{match.name} 
+        <button onClick={() => props.onClick(match)}>show</button></p>
+    );
     return <>{listOfMatches}</>;
   } else {
     return (
@@ -45,12 +49,14 @@ const App = () => {
     setMatches(matches);
   }, [selectedCountry]);
 
+  const onSelect = country => setMatches([country]);
+
   return (
     <>
       <div>find countries 
         <input value={selectedCountry} onChange={e => setSelectedCountry(e.target.value)} />
       </div>
-      <Results matches={matches} />
+      <Results matches={matches} onClick={onSelect}/>
     </>
   );
 }
