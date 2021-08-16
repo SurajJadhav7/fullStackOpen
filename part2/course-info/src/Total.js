@@ -1,9 +1,9 @@
 import React from 'react';
 
 const Total = ({ parts }) => {
-    var total = parts[0].exercises + parts[1].exercises + parts[2].exercises;
+    var total = parts.reduce((acc, part) => acc+part.exercises, 0);
     return (
-        <p>Number of exercises {total}</p>
+        <strong>total of {total} exercises</strong>
     );
 };
 
