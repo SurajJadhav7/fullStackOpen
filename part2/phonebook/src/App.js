@@ -7,7 +7,11 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const addNewPerson = e => {
     e.preventDefault();
-    setPersons(persons.concat({ name: newName }));
+    if (persons.findIndex(p => p.name===newName) === -1) {
+      setPersons(persons.concat({ name: newName }));
+    } else {
+      alert(`${newName} is already added to phonebook`);
+    }
   }
 
   return (
