@@ -32,6 +32,18 @@ const App = () => {
     setFilter(e.target.value);
   }
 
+  const deleteEntry = (id, name) => {
+    const confirmDelete = window.confirm(`Delete ${name} ?`);
+    if (confirmDelete) {
+      personsService.deletePerson(id)
+      .then(response => {
+        console.log('in promise..');
+        setPersons(persons.filter(p => p.id !== id));
+      })
+      .catch(error => console.log(error))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -45,7 +57,7 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons filter={filter} persons={persons} />
+      <Persons filter={filter} persons={persons} delete={deleteEntry}/>
     </div>
   )
 }

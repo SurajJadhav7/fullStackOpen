@@ -11,4 +11,10 @@ const addNew = person => {
     return promise.then(response => response.data);
 }
 
-export default { getAll, addNew };
+const deletePerson = id => {
+    const promise = axios.delete(`${baseUrl}/${id}`);
+    return promise.then(response => response.data);
+};
+
+const personsService={ getAll, addNew, deletePerson };
+export default personsService;
