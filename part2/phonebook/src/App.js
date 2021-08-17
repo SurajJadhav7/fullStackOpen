@@ -9,14 +9,17 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+
   useEffect(() => {
     personsService.getAll()
       .then(response => setPersons(response))
       .catch(error => console.log(error))
   }, []);
-  const addNewPerson = e => {
+
+  const newUpdate = e => {
     e.preventDefault();
-    if (persons.findIndex(p => p.name===newName) === -1) {
+    const personFound = persons.find(p => p.name===newName);
+    if (!personFound) {
       const newPerson = { name: newName, number: newNumber };
       personsService.addNew(newPerson)
         .then(response => {
@@ -24,9 +27,23 @@ const App = () => {
         })
         .catch(error => console.log(error))
     } else {
-      alert(`${newName} is already added to phonebook`);
+      const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      if (confirmUpdate) {
+        const newPerson = { name: newName, number: newNumber };
+        personsService.updatePerson(personFound.id, newPerson)
+          .then(response => {
+            setPersons(persons.map(p => {
+              if (p.id === personFound.id) {
+                return newPerson;
+              }
+              return p;
+            }))
+          })
+          .catch(error => console.log(error))
+      }
     }
   }
+  
   const search = e => {
     e.preventDefault();
     setFilter(e.target.value);
@@ -50,7 +67,7 @@ const App = () => {
       <Filter filter={filter} onChange={search} />
       <h2>add a new</h2>
       <PersonForm 
-        addNewPerson={addNewPerson}
+        newUpdate={newUpdate}
         newName={newName}
         setNewName={setNewName}
         newNumber={newNumber}
