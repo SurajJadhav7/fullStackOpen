@@ -3,12 +3,15 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personsService from './services/persons';
+import Notification from './components/Notification';
+import './App.css';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   useEffect(() => {
     personsService.getAll()
@@ -24,6 +27,8 @@ const App = () => {
       personsService.addNew(newPerson)
         .then(response => {
           setPersons(persons.concat(response));
+          setNotification(`Added ${newName}`);
+          setTimeout(() => setNotification(null), 3000);
         })
         .catch(error => console.log(error))
     } else {
@@ -38,8 +43,15 @@ const App = () => {
               }
               return p;
             }))
+            setNotification(`Updated ${newName}'s Number`);
+            setTimeout(() => setNotification(null), 3000);
           })
-          .catch(error => console.log(error))
+          .catch(error => {
+            setNotification(`Information of ${newName} has already been removed from server`);
+            setPersons(persons.filter(p => p.id !== personFound.id));
+            setTimeout(() => setNotification(null), 3000);
+            console.log(error);
+          })
       }
     }
   }
@@ -64,6 +76,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter filter={filter} onChange={search} />
       <h2>add a new</h2>
       <PersonForm 
